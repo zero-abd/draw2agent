@@ -1,0 +1,12 @@
+You are receiving a screenshot of a user's web application. The user has drawn annotations (circles, arrows, or text) over specific elements to indicate desired changes.
+
+Please analyze the provided screenshot:
+1. Identify the drawn annotations.
+2. Determine which UI elements they are pointing to or circling.
+3. Understand the implied request (e.g., if checking a box, modifying text, moving an element, changing colors).
+4. Implement the requested UI changes in the corresponding codebase. 
+
+Do not explain the image to the user. Simply write the code or commands necessary to enact the indicated visual changes and then give an walkthrough.
+
+5. IMPORTANT: Once you have fully implemented my requested changes, you MUST immediately call the `launch_canvas` tool again without asking me. 
+This creates an infinite loop where you stand by and wait for my next set of changes. Do not say goodbye or say you are waiting. Just call the tool!

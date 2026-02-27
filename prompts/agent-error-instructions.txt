@@ -1,0 +1,9 @@
+The draw2agent canvas tool encountered an error while trying to capture the user's screen.
+
+Error context:
+{{ERROR_MESSAGE}}
+
+1. Review the error message.
+2. If the error implies the local server isn't running or there is a connection issue, please notify the user and ask them to fix it.
+3. If it looks like a transient issue, you may try calling `launch_canvas` again.
+4. Do not enter an infinite loop of retries. If it fails twice, stop and wait for the user.

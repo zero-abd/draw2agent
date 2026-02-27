@@ -1,0 +1,35 @@
+{
+  "name": "draw2agent",
+  "version": "0.1.0",
+  "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "draw2agent": "./bin/draw2agent.js"
+  },
+  "scripts": {
+    "build:server": "tsup",
+    "build:overlay": "cd overlay && npm run build",
+    "build": "npm run build:server && npm run build:overlay",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["mcp", "draw", "ai", "agent", "code-generation", "excalidraw", "visual"],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "http-proxy": "^1.18.1",
+    "open": "^10.1.0"
+  },
+  "devDependencies": {
+    "@types/http-proxy": "^1.17.14",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  },
+  "files": [
+    "dist",
+    "overlay/dist",
+    "bin"
+  ]
+}

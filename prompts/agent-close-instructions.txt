@@ -1,0 +1,5 @@
+The user has intentionally closed the draw2agent canvas session. They are done making visual annotations for now.
+
+1. DO NOT call the `launch_canvas` tool again. The looping session is over.
+2. Provide a small bullet-point summary of all the changes you made across the entire drawing session.
+3. Ask the user if there is anything else they would like to do.

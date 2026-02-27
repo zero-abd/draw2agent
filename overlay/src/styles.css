@@ -1,0 +1,311 @@
+/*
+ * draw2agent — Overlay Styles
+ * Positioning, toolbar, toast notifications
+ */
+
+/* ============================================
+   Root container — full-page overlay
+   ============================================ */
+#draw2agent-root {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 99999 !important;
+  pointer-events: none !important;
+}
+
+/* ============================================
+   Excalidraw canvas container
+   ============================================ */
+.d2a-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+}
+
+/* Make Excalidraw canvas area transparent */
+.d2a-canvas-container .excalidraw {
+  --default-bg-color: transparent !important;
+  background: transparent !important;
+}
+
+/* Ensure the actual drawing area is transparent */
+.d2a-canvas-container .excalidraw .excalidraw__canvas-wrapper canvas {
+  background: transparent !important;
+}
+
+/* Restore opaque dark backgrounds inside UI panels so they don't inherit transparency */
+.d2a-canvas-container .excalidraw .App-menu_top__left,
+.d2a-canvas-container .excalidraw .App-toolbar-container,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__top-right {
+  --default-bg-color: rgba(30, 30, 36, 0.95) !important;
+  --island-bg-color: rgba(30, 30, 36, 0.95) !important;
+  --color-surface-low: rgba(30, 30, 36, 0.95) !important;
+  background-color: var(--island-bg-color) !important;
+}
+
+
+
+/* Hide some Excalidraw UI elements we don't need */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer-center,
+.d2a-canvas-container .excalidraw [data-testid="toolbar-lock"],
+.d2a-canvas-container .excalidraw [data-testid="toolbar-hand"],
+.d2a-canvas-container .excalidraw [data-testid="toolbar-selection"],
+.d2a-canvas-container .excalidraw [title*="Lock" i],
+.d2a-canvas-container .excalidraw [title*="Hand" i],
+.d2a-canvas-container .excalidraw [title*="Selection" i],
+.d2a-canvas-container .excalidraw [title*="Select" i],
+.d2a-canvas-container .excalidraw [data-testid="toolbar-arrow"] {
+  display: none !important;
+}
+
+/* Hide the 'Click and drag' hint viewer below the toolbar */
+.d2a-canvas-container .excalidraw .HintViewer {
+  display: none !important;
+}
+
+/* Permanently hide Excalidraw hamburger menu */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__header,
+.d2a-canvas-container .excalidraw .App-menu_top__left > div:first-child:has(button) {
+  display: none !important;
+}
+
+/* Hide the random Excalidraw menu background bar that appears behind the library button */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer-right,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer::before,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer::after,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer .FixedSideContainer {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  pointer-events: none !important;
+}
+
+/* Ensure the library button inside the footer remains intractable */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer * {
+  pointer-events: auto;
+}
+
+/* Give the toolbar container (wrapping the shapes grid) a proper dark panel background */
+.d2a-canvas-container .excalidraw .App-toolbar-container {
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: var(--shadow-island) !important;
+  padding: 4px !important;
+}
+
+/* Hide properties, toolbar, and library in Select mode or when rendering the screenshot */
+.d2a-canvas-container[data-mode="select"] .excalidraw .App-menu_top__left,
+.d2a-canvas-container[data-mode="select"] .excalidraw .App-toolbar-container,
+.d2a-canvas-container[data-mode="select"] .excalidraw .layer-ui__wrapper__top-right,
+.d2a-canvas-container.d2a-capturing .excalidraw .App-menu_top__left,
+.d2a-canvas-container.d2a-capturing .excalidraw .App-toolbar-container,
+.d2a-canvas-container.d2a-capturing .excalidraw .layer-ui__wrapper__top-right {
+  display: none !important;
+}
+
+/* Hide Excalidraw links from the hamburger menu */
+.d2a-canvas-container .excalidraw .dropdown-menu .Stack.Stack_vertical:has([href*="github.com"]),
+.d2a-canvas-container .excalidraw .dropdown-menu .Stack.Stack_vertical:has([href*="twitter.com"]),
+.d2a-canvas-container .excalidraw .dropdown-menu .Stack.Stack_vertical:has([href*="discord.gg"]) {
+  display: none !important;
+}
+
+/* For robustness, hide specific sections in the menu using structural matching */
+.d2a-canvas-container .excalidraw .dropdown-menu-item__text a[href*="excalidraw"],
+.d2a-canvas-container .excalidraw .dropdown-menu-item__text a[href*="github.com"],
+.d2a-canvas-container .excalidraw .dropdown-menu-item__text a[href*="discord.gg"],
+.d2a-canvas-container .excalidraw .dropdown-menu-item__text a[href*="twitter.com"],
+.d2a-canvas-container .excalidraw [data-testid="dropdown-menu-item-github"],
+.d2a-canvas-container .excalidraw [data-testid="dropdown-menu-item-twitter"],
+.d2a-canvas-container .excalidraw [data-testid="dropdown-menu-item-discord"] {
+  display: none !important;
+}
+
+.d2a-canvas-container .excalidraw .dropdown-menu-group-title {
+  display: none !important; /* Hides "Excalidraw links" header text */
+}
+
+/* Move the Zoom and Undo/Redo buttons (footer-left) to the bottom right */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__footer-left {
+  position: absolute !important;
+  right: 1.5rem !important;
+  bottom: 1.5rem !important;
+  left: auto !important;
+}
+
+/* Move Library button to bottom-right, above undo/redo */
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__top-right {
+  position: fixed !important;
+  bottom: 100px !important;
+  right: 1.5rem !important;
+  top: auto !important;
+  left: auto !important;
+  width: max-content !important;
+  min-width: 0 !important;
+  z-index: 100000;
+  border-radius: var(--border-radius-lg) !important;
+  box-shadow: var(--shadow-island) !important;
+  padding: 4px 8px !important;
+}
+
+/* ============================================
+   Draggable Handles (CSS Visuals Only)
+   ============================================ */
+.d2a-canvas-container .excalidraw .App-menu_top__left::before,
+.d2a-canvas-container .excalidraw .App-toolbar-container::before,
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__top-right::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 20px;
+  /* Two vertical lines */
+  border-left: 2px solid rgba(255, 255, 255, 0.4);
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  box-sizing: border-box;
+  pointer-events: none; /* Let drag events pass through to panel */
+}
+
+/* ============================================
+   Floating Toolbar
+   ============================================ */
+.d2a-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100001;
+  pointer-events: all !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.d2a-toolbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(20, 20, 24, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.d2a-toolbar-brand {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e0e0e0;
+  padding: 0 6px;
+  white-space: nowrap;
+  letter-spacing: -0.3px;
+}
+
+.d2a-toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.d2a-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #b0b0b8;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.d2a-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.d2a-btn-active {
+  background: rgba(99, 102, 241, 0.3) !important;
+  color: #a5b4fc !important;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.5) inset;
+}
+
+.d2a-btn-submit {
+  background: rgba(16, 185, 129, 0.2) !important;
+  color: #6ee7b7 !important;
+}
+
+.d2a-btn-submit:hover {
+  background: rgba(16, 185, 129, 0.35) !important;
+  color: #a7f3d0 !important;
+}
+
+.d2a-btn-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Toast Notifications
+   ============================================ */
+.d2a-toast {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background: rgba(16, 185, 129, 0.2);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 12px;
+  color: #a7f3d0;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: d2a-toast-in 0.3s ease;
+  pointer-events: none;
+}
+
+.d2a-toast-error {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+@keyframes d2a-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ============================================
+   Drag State Modifiers
+   ============================================ */
+body.d2a-is-dragging-panel .d2a-canvas-container .excalidraw .excalidraw__canvas-wrapper {
+  pointer-events: none !important;
+}
