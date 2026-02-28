@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2024-11-05/server.schema.json",
+  "name": "io.github.zero-abd/draw2agent",
+  "title": "draw2agent",
+  "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
+  "websiteUrl": "https://github.com/zero-abd/draw2agent",
+  "repository": "https://github.com/zero-abd/draw2agent",
+  "packages": {
+    "npm": "draw2agent"
+  },
+  "auth": {
+    "type": "github-oidc"
+  }
+}

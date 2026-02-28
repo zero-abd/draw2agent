@@ -1,11 +1,16 @@
 {
   "name": "draw2agent",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
     "draw2agent": "./bin/draw2agent.js"
+  },
+  "author": "zero-abd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zero-abd/draw2agent.git"
   },
   "scripts": {
     "build:server": "tsup",
@@ -30,6 +35,7 @@
   "files": [
     "dist",
     "overlay/dist",
-    "bin"
+    "bin",
+    "prompts"
   ]
 }
