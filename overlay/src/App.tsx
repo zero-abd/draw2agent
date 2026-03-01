@@ -49,15 +49,15 @@ export const App: React.FC = () => {
 
     const handlePointerDown = (e: PointerEvent) => {
       const target = e.target as HTMLElement;
-      
+
       // Find one of our draggable panels
-      const panel = target.closest('.App-menu_top__left, .App-toolbar-container, .layer-ui__wrapper__top-right') as HTMLElement;
+      const panel = target.closest('.App-menu_top__left, .App-toolbar-container, .layer-ui__wrapper__top-right, .d2a-toolbar') as HTMLElement;
       if (!panel) return;
 
       // Don't drag if clicking buttons, inputs, labels, or anything interactive
       if (
-        target.tagName.match(/INPUT|BUTTON|SELECT|TEXTAREA|LABEL/) || 
-        target.closest('button') || 
+        target.tagName.match(/INPUT|BUTTON|SELECT|TEXTAREA|LABEL/) ||
+        target.closest('button') ||
         target.closest('label') ||
         target.closest('.ToolIcon_type_radio') ||
         target.closest('.color-picker__button') ||
@@ -65,12 +65,12 @@ export const App: React.FC = () => {
       ) {
         return;
       }
-      
+
       // If clicking inside the inner tool stack (mostly for main toolbar/properties wrapper), only block if it's an interactive descendant
       if (target.closest('.Stack') && target.closest('.Stack')?.children.length && target !== panel) {
-        if (!target.classList.contains('App-toolbar-container') && 
-            !target.classList.contains('Island') &&
-            !target.closest('.layer-ui__wrapper__top-right')) {
+        if (!target.classList.contains('App-toolbar-container') &&
+          !target.classList.contains('Island') &&
+          !target.closest('.layer-ui__wrapper__top-right')) {
           return;
         }
       }
@@ -101,7 +101,7 @@ export const App: React.FC = () => {
 
       // Add dragging class to body to disable canvas pointer events
       document.body.classList.add('d2a-is-dragging-panel');
-      
+
       // Capture pointer so dragging works even if cursor leaves the panel
       panel.setPointerCapture(e.pointerId);
     };
@@ -113,7 +113,7 @@ export const App: React.FC = () => {
 
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
-      
+
       currentPanel.style.setProperty('left', `${initialLeft + dx}px`, 'important');
       currentPanel.style.setProperty('top', `${initialTop + dy}px`, 'important');
     };
@@ -137,7 +137,7 @@ export const App: React.FC = () => {
 
     // Also add visual CSS handles dynamically
     const styleInterval = setInterval(() => {
-      const panels = document.querySelectorAll('.App-menu_top__left, .App-toolbar-container, .layer-ui__wrapper__top-right');
+      const panels = document.querySelectorAll('.App-menu_top__left, .App-toolbar-container, .layer-ui__wrapper__top-right, .d2a-toolbar');
       panels.forEach((el) => {
         const panel = el as HTMLElement;
         if (!panel.dataset.d2aDraggable) {
@@ -160,7 +160,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     if (mode === 'draw' && excalidrawApiRef.current) {
       excalidrawApiRef.current.updateScene({
-        appState: { 
+        appState: {
           activeTool: { type: 'freedraw', customType: null, lastActiveTool: null, locked: false },
           currentItemStrokeWidth: 1, // Set default thickness to round thin
           currentItemStrokeStyle: 'solid',
@@ -185,7 +185,7 @@ export const App: React.FC = () => {
     }
     // Attempt to close the tab
     window.close();
-    
+
     // Fallback UI if window.close() is blocked
     document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#111;color:#fff;font-family:sans-serif;font-size:24px;">draw2agent session closed. You can safely close this tab.</div>';
   }, []);

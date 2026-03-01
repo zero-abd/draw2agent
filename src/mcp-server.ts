@@ -86,7 +86,7 @@ export function createMcpServer(): McpServer {
             },
             {
               type: 'image' as const,
-              data: state.croppedScreenshot.replace(/^data:image\/\w+;base64,/, ''),
+              data: state.annotatedScreenshot.replace(/^data:image\/\w+;base64,/, ''),
               mimeType: 'image/png' as const,
             },
           ],

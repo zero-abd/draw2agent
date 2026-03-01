@@ -71,7 +71,7 @@
 
 /* Permanently hide Excalidraw hamburger menu */
 .d2a-canvas-container .excalidraw .layer-ui__wrapper__header,
-.d2a-canvas-container .excalidraw .App-menu_top__left > div:first-child:has(button) {
+.d2a-canvas-container .excalidraw .App-menu_top__left>div:first-child:has(button) {
   display: none !important;
 }
 
@@ -129,7 +129,8 @@
 }
 
 .d2a-canvas-container .excalidraw .dropdown-menu-group-title {
-  display: none !important; /* Hides "Excalidraw links" header text */
+  display: none !important;
+  /* Hides "Excalidraw links" header text */
 }
 
 /* Move the Zoom and Undo/Redo buttons (footer-left) to the bottom right */
@@ -160,7 +161,8 @@
    ============================================ */
 .d2a-canvas-container .excalidraw .App-menu_top__left::before,
 .d2a-canvas-container .excalidraw .App-toolbar-container::before,
-.d2a-canvas-container .excalidraw .layer-ui__wrapper__top-right::before {
+.d2a-canvas-container .excalidraw .layer-ui__wrapper__top-right::before,
+.d2a-toolbar::before {
   content: "";
   position: absolute;
   left: -12px;
@@ -172,7 +174,8 @@
   border-left: 2px solid rgba(255, 255, 255, 0.4);
   border-right: 2px solid rgba(255, 255, 255, 0.4);
   box-sizing: border-box;
-  pointer-events: none; /* Let drag events pass through to panel */
+  pointer-events: none;
+  /* Let drag events pass through to panel */
 }
 
 /* ============================================
@@ -181,8 +184,7 @@
 .d2a-toolbar {
   position: fixed;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 24px;
   z-index: 100001;
   pointer-events: all !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -297,6 +299,7 @@
     opacity: 0;
     transform: translateX(-50%) translateY(8px);
   }
+
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
