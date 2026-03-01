@@ -245,13 +245,35 @@ export async function captureAndSubmit(
       return { success: false, error: 'No annotations drawn. Draw something first!' };
     }
 
-    // 1. Take a single screenshot of the entire page exactly as the user sees it (including annotations)
+    // 1. Take a screenshot of the page (html-to-image cannot capture <canvas> content)
     const pageScreenshot = await takeScreenshot();
 
-    // 2. Serialize DOM nodes in the drawn area
+    // 2. Export Excalidraw annotations as a transparent overlay image
+    const annotationOverlay = await exportAnnotationImage();
+
+    // 3. Composite annotations on top of the page screenshot
+    let annotatedScreenshot = pageScreenshot;
+    if (annotationOverlay) {
+      annotatedScreenshot = await compositeImages(
+        pageScreenshot,
+        annotationOverlay,
+        window.innerWidth,
+        window.innerHeight,
+      );
+    }
+
+    // 4. Crop the composited image to just the drawing area
+    let croppedScreenshot = annotatedScreenshot;
+    try {
+      croppedScreenshot = await cropImage(annotatedScreenshot, bounds);
+    } catch {
+      // Fall back to the full annotated screenshot
+    }
+
+    // 5. Serialize DOM nodes in the drawn area
     const domNodes = getElementsInBounds(bounds);
 
-    // 3. Assemble payload
+    // 6. Assemble payload
     const payload = {
       timestamp: new Date().toISOString(),
       targetUrl: window.location.origin,
@@ -259,9 +281,9 @@ export async function captureAndSubmit(
         width: window.innerWidth,
         height: window.innerHeight,
       },
-      pageScreenshot,          // Single screenshot containing both page and drawings
-      croppedScreenshot: pageScreenshot,       // Fallback
-      annotatedScreenshot: pageScreenshot,     // Fallback
+      pageScreenshot,
+      croppedScreenshot,
+      annotatedScreenshot,
       drawingBounds: bounds,
       annotations,
       domNodes,
