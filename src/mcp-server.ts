@@ -4,7 +4,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { startHttpServer, stopHttpServer } from './http-server.js';
-import { getState, clearState, setProxyInfo, getProxyInfo, waitForState } from './state-store.js';
+import { getState, clearState, setProxyInfo, clearProxyInfo, getProxyInfo, waitForState } from './state-store.js';
 import { openBrowser } from './utils/browser.js';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -107,7 +107,7 @@ export function createMcpServer(): McpServer {
             
             // Cleanly shut down the dev server so the next request spins up a new tab
             stopHttpServer();
-            setProxyInfo('');
+            clearProxyInfo();
           } else {
             if (fs.existsSync(ERROR_INSTRUCTIONS_PATH)) {
               customInstructions = fs.readFileSync(ERROR_INSTRUCTIONS_PATH, 'utf-8').replace('{{ERROR_MESSAGE}}', message);

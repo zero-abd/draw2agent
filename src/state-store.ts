@@ -87,10 +87,15 @@ export function getState(): DrawingState | null {
 
 export function clearState(): void {
   currentState = null;
+  isSessionClosed = false;
 }
 
 export function setProxyInfo(url: string): void {
   proxyInfo = { running: true, url };
+}
+
+export function clearProxyInfo(): void {
+  proxyInfo = { running: false, url: '' };
 }
 
 export function getProxyInfo(): { running: boolean; url: string } {
