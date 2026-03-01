@@ -160,6 +160,12 @@ async function takeScreenshot(): Promise<string> {
     const dataUrl = await htmlToImage.toPng(document.documentElement, {
       pixelRatio: window.devicePixelRatio || 1,
       skipFonts: true, // Speeds up capture and prevents some CORS issues
+      width: window.innerWidth,
+      height: window.innerHeight,
+      style: {
+        transform: `translate(${-window.scrollX}px, ${-window.scrollY}px)`,
+        transformOrigin: 'top left',
+      },
     });
     return dataUrl;
   } finally {

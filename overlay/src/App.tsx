@@ -236,6 +236,7 @@ export const App: React.FC = () => {
         appState: {
           ...api.getAppState(),
           exportBackground: false,
+          exportWithDarkMode: true,
         },
         files: api.getFiles(),
       });

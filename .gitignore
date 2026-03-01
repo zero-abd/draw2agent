@@ -129,3 +129,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test outputs
+test-output.png
