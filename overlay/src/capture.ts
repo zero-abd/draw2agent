@@ -180,7 +180,7 @@ function cropImage(dataUrl: string, bounds: BoundingBox): Promise<string> {
       canvas.height = bounds.height * dpr;
       const ctx = canvas.getContext('2d');
       if (!ctx) return reject('No 2d context');
-      
+
       ctx.drawImage(
         img,
         bounds.x * dpr, bounds.y * dpr,
@@ -197,8 +197,10 @@ function cropImage(dataUrl: string, bounds: BoundingBox): Promise<string> {
 
 /**
  * Composite two base64 images (drawings over background).
+ * When drawingBounds is provided, the overlay is positioned at the correct
+ * coordinates instead of being stretched across the full canvas.
  */
-function compositeImages(backgroundUrl: string, overlayUrl: string, width: number, height: number): Promise<string> {
+function compositeImages(backgroundUrl: string, overlayUrl: string, width: number, height: number, drawingBounds?: BoundingBox): Promise<string> {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     const dpr = window.devicePixelRatio || 1;
@@ -213,7 +215,18 @@ function compositeImages(backgroundUrl: string, overlayUrl: string, width: numbe
     bgImg.onload = () => {
       ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
       fgImg.onload = () => {
-        ctx.drawImage(fgImg, 0, 0, canvas.width, canvas.height);
+        if (drawingBounds) {
+          // Position the overlay at the correct location matching where the user drew
+          ctx.drawImage(
+            fgImg,
+            drawingBounds.x * dpr,
+            drawingBounds.y * dpr,
+            drawingBounds.width * dpr,
+            drawingBounds.height * dpr,
+          );
+        } else {
+          ctx.drawImage(fgImg, 0, 0, canvas.width, canvas.height);
+        }
         resolve(canvas.toDataURL('image/png'));
       };
       fgImg.onerror = reject;
@@ -259,6 +272,7 @@ export async function captureAndSubmit(
         annotationOverlay,
         window.innerWidth,
         window.innerHeight,
+        bounds,
       );
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "draw2agent",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
   "type": "module",
   "main": "dist/index.js",
@@ -19,7 +19,15 @@
     "dev": "tsup --watch",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["mcp", "draw", "ai", "agent", "code-generation", "excalidraw", "visual"],
+  "keywords": [
+    "mcp",
+    "draw",
+    "ai",
+    "agent",
+    "code-generation",
+    "excalidraw",
+    "visual"
+  ],
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",

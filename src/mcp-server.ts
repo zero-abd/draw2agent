@@ -57,7 +57,7 @@ export function createMcpServer(): McpServer {
         if (!proxyInfo.running) {
           const proxyUrl = await startHttpServer(targetUrl, proxyPort);
           setProxyInfo(proxyUrl);
-          
+
           // Open browser only on initial launch
           await openBrowser(proxyUrl);
         }
@@ -69,7 +69,7 @@ export function createMcpServer(): McpServer {
 
         let instructionsUrl = '';
         let customInstructions = 'Analyze the attached screenshot with user annotations and implement the requested UI changes in the codebase.';
-        
+
         try {
           if (fs.existsSync(INSTRUCTIONS_PATH)) {
             customInstructions = fs.readFileSync(INSTRUCTIONS_PATH, 'utf-8');
@@ -86,7 +86,7 @@ export function createMcpServer(): McpServer {
             },
             {
               type: 'image' as const,
-              data: state.annotatedScreenshot.replace(/^data:image\/\w+;base64,/, ''),
+              data: state.croppedScreenshot.replace(/^data:image\/\w+;base64,/, ''),
               mimeType: 'image/png' as const,
             },
           ],
@@ -104,7 +104,7 @@ export function createMcpServer(): McpServer {
               customInstructions = 'The user closed the draw2agent session. Please summarize the changes you made.';
             }
             isErrorResult = false; // Intentional close isn't a tool failure
-            
+
             // Cleanly shut down the dev server so the next request spins up a new tab
             stopHttpServer();
             clearProxyInfo();
