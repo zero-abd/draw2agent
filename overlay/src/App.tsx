@@ -231,12 +231,44 @@ export const App: React.FC = () => {
     if (elements.length === 0) return '';
 
     try {
+      // Create a dummy invisible rectangle at (0,0) with window size
+      // This forces Excalidraw to export the full screen bounds rather than
+      // cropping to just the drawn elements.
+      const dummyElement = {
+        type: 'rectangle',
+        version: 1,
+        versionNonce: Date.now(),
+        isDeleted: false,
+        id: 'dummy-export-bounds',
+        fillStyle: 'solid',
+        strokeWidth: 0,
+        strokeStyle: 'solid',
+        roughness: 0,
+        opacity: 0,
+        angle: 0,
+        x: 0,
+        y: 0,
+        strokeColor: 'transparent',
+        backgroundColor: 'transparent',
+        width: window.innerWidth,
+        height: window.innerHeight,
+        seed: 1,
+        groupIds: [],
+        frameId: null,
+        roundness: null,
+        boundElements: null,
+        updated: Date.now(),
+        link: null,
+        locked: true,
+      } as unknown as ExcalidrawElement;
+
       const blob = await exportToBlob({
-        elements,
+        elements: [...elements, dummyElement],
         appState: {
           ...api.getAppState(),
           exportBackground: false,
           exportWithDarkMode: true,
+          exportPadding: 0, // No extra padding so it aligns exactly
         },
         files: api.getFiles(),
       });

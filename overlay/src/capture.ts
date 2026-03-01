@@ -157,15 +157,9 @@ async function takeScreenshot(): Promise<string> {
   if (toolbar) toolbar.style.display = 'none';
 
   try {
-    const dataUrl = await htmlToImage.toPng(document.documentElement, {
+    const dataUrl = await htmlToImage.toPng(document.body, {
       pixelRatio: window.devicePixelRatio || 1,
       skipFonts: true, // Speeds up capture and prevents some CORS issues
-      width: window.innerWidth,
-      height: window.innerHeight,
-      style: {
-        transform: `translate(${-window.scrollX}px, ${-window.scrollY}px)`,
-        transformOrigin: 'top left',
-      },
     });
     return dataUrl;
   } finally {
@@ -203,10 +197,9 @@ function cropImage(dataUrl: string, bounds: BoundingBox): Promise<string> {
 
 /**
  * Composite two base64 images (drawings over background).
- * When drawingBounds is provided, the overlay is positioned at the correct
- * coordinates instead of being stretched across the full canvas.
+ * The overlayUrl should be exactly the same dimensions as the background.
  */
-function compositeImages(backgroundUrl: string, overlayUrl: string, width: number, height: number, drawingBounds?: BoundingBox): Promise<string> {
+function compositeImages(backgroundUrl: string, overlayUrl: string, width: number, height: number, scrollX: number, scrollY: number): Promise<string> {
   return new Promise((resolve, reject) => {
     const canvas = document.createElement('canvas');
     const dpr = window.devicePixelRatio || 1;
@@ -219,20 +212,21 @@ function compositeImages(backgroundUrl: string, overlayUrl: string, width: numbe
     const fgImg = new Image();
 
     bgImg.onload = () => {
-      ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+      // Draw the cropped viewport area of the full-page screenshot
+      ctx.drawImage(
+        bgImg,
+        scrollX * dpr,
+        scrollY * dpr,
+        canvas.width,
+        canvas.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
       fgImg.onload = () => {
-        if (drawingBounds) {
-          // Position the overlay at the correct location matching where the user drew
-          ctx.drawImage(
-            fgImg,
-            drawingBounds.x * dpr,
-            drawingBounds.y * dpr,
-            drawingBounds.width * dpr,
-            drawingBounds.height * dpr,
-          );
-        } else {
-          ctx.drawImage(fgImg, 0, 0, canvas.width, canvas.height);
-        }
+        // Overlay is already viewport-sized
+        ctx.drawImage(fgImg, 0, 0, canvas.width, canvas.height);
         resolve(canvas.toDataURL('image/png'));
       };
       fgImg.onerror = reject;
@@ -270,7 +264,6 @@ export async function captureAndSubmit(
     // 2. Export Excalidraw annotations as a transparent overlay image
     const annotationOverlay = await exportAnnotationImage();
 
-    // 3. Composite annotations on top of the page screenshot
     let annotatedScreenshot = pageScreenshot;
     if (annotationOverlay) {
       annotatedScreenshot = await compositeImages(
@@ -278,7 +271,8 @@ export async function captureAndSubmit(
         annotationOverlay,
         window.innerWidth,
         window.innerHeight,
-        bounds,
+        window.scrollX,
+        window.scrollY
       );
     }
 
