@@ -142,7 +142,6 @@ export const App: React.FC = () => {
         const panel = el as HTMLElement;
         if (!panel.dataset.d2aDraggable) {
           panel.dataset.d2aDraggable = 'true';
-          panel.style.setProperty('cursor', 'move', 'important');
         }
       });
     }, 1000);
