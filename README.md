@@ -1,8 +1,17 @@
 # draw2agent ✏️
 
+[![mcp-registry](https://img.shields.io/badge/mcp--registry-draw2agent%401.3.3-blue)](https://mcpregistry.com/packages/draw2agent)
+
 Draw on your website. Your AI agent sees it.
 
 **draw2agent** is an MCP server that lets you draw annotations directly on top of your local dev page. When you submit, your IDE agent receives a screenshot, structured DOM data, and annotation context to make precise code edits.
+
+👉 **Try it out at:** [draw2agent.vercel.app](https://draw2agent.vercel.app)
+
+## Demo
+
+[![draw2agent demo video](https://img.youtube.com/vi/siv1ioOnOXk/maxresdefault.jpg)](https://youtu.be/siv1ioOnOXk)
+*(Note: Video hosted on YouTube. Demo files have been ignored from the repository to save space.)*
 
 ## Quick Start
 

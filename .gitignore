@@ -135,3 +135,6 @@ test-output.png
 
 # Videos
 videos/
+
+# MCP Publisher
+mcp-publisher.exe
