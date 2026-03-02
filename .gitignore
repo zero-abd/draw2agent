@@ -138,3 +138,4 @@ videos/
 
 # MCP Publisher
 mcp-publisher.exe
+.mcpregistry_*
