@@ -1,6 +1,6 @@
 # draw2agent ✏️
 
-[![mcp-registry](https://img.shields.io/badge/mcp--registry-draw2agent%401.3.3-blue)](https://mcpregistry.com/packages/draw2agent)
+[![mcp-registry](https://img.shields.io/badge/mcp--registry-io.github.zero--abd%2Fdraw2agent%401.3.4-blue)](https://mcpregistry.com/packages/io.github.zero-abd/draw2agent)
 
 Draw on your website. Your AI agent sees it.
 
@@ -11,7 +11,6 @@ Draw on your website. Your AI agent sees it.
 ## Demo
 
 [![draw2agent demo video](https://img.youtube.com/vi/siv1ioOnOXk/maxresdefault.jpg)](https://youtu.be/siv1ioOnOXk)
-*(Note: Video hosted on YouTube. Demo files have been ignored from the repository to save space.)*
 
 ## Quick Start
 
