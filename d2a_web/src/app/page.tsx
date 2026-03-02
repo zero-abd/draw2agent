@@ -11,9 +11,9 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <Install />
         <Features />
         <HowItWorks />
-        <Install />
       </main>
       <Footer />
     </>

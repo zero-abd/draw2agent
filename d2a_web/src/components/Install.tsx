@@ -62,8 +62,8 @@ function CopyButton({ text }: { text: string }) {
         <button
             onClick={copy}
             className={`flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium transition-all ${copied
-                    ? "text-green-400"
-                    : "text-[rgba(255,255,255,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]"
+                ? "text-green-400"
+                : "text-[rgba(255,255,255,0.4)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]"
                 }`}
         >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -97,7 +97,7 @@ function TabCursor() {
                 <p className="text-sm text-[rgba(255,255,255,0.6)] mb-3">Click to add draw2agent directly to Cursor:</p>
                 <a
                     href="cursor://anysphere.cursor-deeplink/mcp/install?name=draw2agent&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImRyYXcyYWdlbnRAbGF0ZXN0Il19"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-br from-[#6366f1] to-[#818cf8] text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all"
+                    className="flex w-full justify-center items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-br from-[#6366f1] to-[#818cf8] text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] transition-all"
                 >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><polyline points="15 3 21 3 21 9" /><line x1="10" y1="14" x2="21" y2="3" /></svg>
                     Add to Cursor Directly
@@ -209,8 +209,8 @@ export default function Install() {
                                 key={tab.key}
                                 onClick={() => setActive(tab.key)}
                                 className={`relative flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-[13px] font-medium transition-all flex-1 justify-center whitespace-nowrap ${active === tab.key
-                                        ? "text-white"
-                                        : "text-[rgba(255,255,255,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]"
+                                    ? "text-white"
+                                    : "text-[rgba(255,255,255,0.6)] hover:text-white hover:bg-[rgba(255,255,255,0.05)]"
                                     }`}
                             >
                                 {active === tab.key && (

@@ -132,3 +132,6 @@ dist-ssr
 
 # Test outputs
 test-output.png
+
+# Videos
+videos/
