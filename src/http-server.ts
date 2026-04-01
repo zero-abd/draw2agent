@@ -193,6 +193,7 @@ export function startHttpServer(targetUrl: string, port: number): Promise<string
 
 export function stopHttpServer(): void {
   if (server) {
+    server.closeAllConnections();
     server.close();
     server = null;
   }

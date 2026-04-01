@@ -184,6 +184,7 @@ export function startScratchServer(port: number): Promise<string> {
 
 export function stopScratchServer(): void {
   if (scratchServer) {
+    scratchServer.closeAllConnections();
     scratchServer.close();
     scratchServer = null;
   }

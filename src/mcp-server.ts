@@ -51,11 +51,7 @@ function handleToolError(err: unknown, toolName: string) {
     isErrorResult = false;
 
     // Cleanly shut down servers so the next request spins up a new tab
-    stopHttpServer();
-    stopScratchServer();
     stopTunnel();
-    clearProxyInfo();
-  } else {
     customInstructions = readPromptFile(ERROR_INSTRUCTIONS_PATH, customInstructions)
       .replace('{{ERROR_MESSAGE}}', message);
   }
