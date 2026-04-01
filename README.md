@@ -1,6 +1,7 @@
 # draw2agent ✏️
 
-[![mcp-registry](https://img.shields.io/badge/mcp--registry-io.github.zero--abd%2Fdraw2agent%401.3.4-blue)](https://registry.modelcontextprotocol.io/?q=draw2agent)
+[![npm version](https://img.shields.io/npm/v/draw2agent)](https://www.npmjs.com/package/draw2agent)
+[![mcp-registry](https://img.shields.io/badge/mcp--registry-io.github.zero--abd%2Fdraw2agent%402.0.0-blue)](https://registry.modelcontextprotocol.io/?q=draw2agent)
 
 Draw on your website. Your AI agent sees it.
 
@@ -22,7 +23,7 @@ Draw on your website. Your AI agent sees it.
   "mcpServers": {
     "draw2agent": {
       "command": "npx",
-      "args": ["-y", "draw2agent"]
+      "args": ["-y", "draw2agent@latest"]
     }
   }
 }
@@ -49,12 +50,28 @@ Your Dev Page (proxied)
     └── Submit: screenshot + DOM + annotations → agent
 ```
 
-The MCP server exposes two tools:
+## Tools
+
+The MCP server exposes the following tools:
 
 | Tool | Description |
 |---|---|
 | `launch_canvas` | Opens your dev page with the drawing overlay |
-| `get_drawing_state` | Returns screenshot, DOM nodes, and annotations |
+| `launch_ipad_canvas` | Creates a tunnel and returns a QR code for remote drawing from iPad/mobile |
+| `launch_scratch` | Opens a standalone Excalidraw whiteboard for freehand sketching |
+| `get_drawing_state` | Returns screenshot, DOM nodes, and annotations for the current state |
+
+### `launch_canvas`
+The core tool — proxies your localhost dev server and injects an Excalidraw overlay. Draw annotations directly on your running app, then submit to send visual context to your agent. The tool blocks until you submit.
+
+### `launch_ipad_canvas`
+Same as `launch_canvas`, but exposes the proxy over the internet via a secure tunnel. Returns a QR code that you can scan from your iPad or phone to draw annotations with touch. Perfect for whiteboard-style feedback sessions.
+
+### `launch_scratch`
+Opens a blank Excalidraw whiteboard — no target URL needed. Sketch UI mockups, wireframes, or diagrams from scratch. Your agent receives the drawing and implements the design.
+
+### `get_drawing_state`
+Returns the last captured drawing state (screenshot, DOM nodes, annotations) without launching a new session. Useful for re-fetching context.
 
 ## License
 

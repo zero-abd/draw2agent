@@ -265,6 +265,48 @@ export function createMcpServer(): McpServer {
       }
     }
   );
+  // ─── Tool: get_drawing_state ──────────────────────────────────────────
+  server.tool(
+    'get_drawing_state',
+    'Returns the current drawing state including screenshot, DOM nodes, and annotations. Use this to retrieve the latest captured state without launching a new canvas session. Returns an error if no state has been captured yet.',
+    {},
+    async () => {
+      const state = getState();
+
+      if (!state) {
+        return {
+          content: [
+            {
+              type: 'text' as const,
+              text: '❌ No drawing state available. The user has not submitted any drawings yet. Use `launch_canvas`, `launch_ipad_canvas`, or `launch_scratch` first.',
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: JSON.stringify({
+              timestamp: state.timestamp,
+              targetUrl: state.targetUrl,
+              viewportSize: state.viewportSize,
+              drawingBounds: state.drawingBounds,
+              domNodes: state.domNodes,
+              annotationCount: state.annotations.length,
+            }, null, 2),
+          },
+          {
+            type: 'image' as const,
+            data: state.annotatedScreenshot.replace(/^data:image\/\w+;base64,/, ''),
+            mimeType: 'image/png' as const,
+          },
+        ],
+      };
+    }
+  );
 
   return server;
 }
