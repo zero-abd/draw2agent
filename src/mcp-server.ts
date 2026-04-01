@@ -183,10 +183,12 @@ export function createMcpServer(): McpServer {
         // Generate QR code for the tunnel URL
         const qr = await generateQR(tunnelUrl);
 
-        // Print QR to stderr (visible in IDE's MCP log)
-        console.error(`\n[draw2agent] 📱 iPad Canvas Ready!`);
-        console.error(`[draw2agent] 🔗 Scan this QR code or open: ${tunnelUrl}`);
-        console.error(qr.ascii);
+        // Open local page showing QR code so user can scan it
+        const os = await import('node:os');
+        const tempFile = path.join(os.tmpdir(), `draw2agent-qr-${Date.now()}.html`);
+        const html = `<!DOCTYPE html><html><body style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100px;min-height:100vh;margin:0;background:#1e1e2e;color:white;font-family:system-ui,sans-serif;"><h1>📱 Scan to Draw</h1><p style="margin-bottom:30px;opacity:0.8;">Scan this QR code from your iPad to start annotating remotely.</p><img src="${qr.dataUrl}" style="border-radius:12px;width:300px;height:300px;"/><p style="margin-top:30px;font-size:1.2rem;background:#ffffff10;padding:8px 16px;border-radius:8px;">${tunnelUrl}</p></body></html>`;
+        fs.writeFileSync(tempFile, html);
+        await openBrowser(`file://${tempFile}`);
 
         clearState();
 

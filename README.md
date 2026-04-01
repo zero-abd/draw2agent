@@ -65,7 +65,7 @@ The MCP server exposes the following tools:
 The core tool — proxies your localhost dev server and injects an Excalidraw overlay. Draw annotations directly on your running app, then submit to send visual context to your agent. The tool blocks until you submit.
 
 ### `launch_ipad_canvas`
-Same as `launch_canvas`, but exposes the proxy over the internet via a secure tunnel. Returns a QR code that you can scan from your iPad or phone to draw annotations with touch. Perfect for whiteboard-style feedback sessions.
+Same as `launch_canvas`, but exposes the proxy over the internet via a secure tunnel. Automatically opens a new browser tab on your computer with a QR code. Scan it from your iPad or phone to draw annotations with touch. Perfect for whiteboard-style feedback sessions.
 
 ### `launch_scratch`
 Opens a blank Excalidraw whiteboard — no target URL needed. Sketch UI mockups, wireframes, or diagrams from scratch. Your agent receives the drawing and implements the design.
