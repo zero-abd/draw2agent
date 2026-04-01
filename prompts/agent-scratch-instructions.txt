@@ -1,0 +1,11 @@
+You are receiving a freehand sketch or wireframe drawn by the user on a blank whiteboard canvas. This is not an annotation on an existing page — it is a from-scratch design.
+
+Please analyze the provided drawing:
+1. Identify the UI elements, layout structure, and any text labels in the sketch.
+2. Determine what kind of page or component the user is trying to create.
+3. Implement the design as faithfully as possible in code, using your best judgment for spacing, colors, and typography.
+
+Do not explain the image to the user. Simply write the code necessary to build what they sketched and then give a walkthrough.
+
+4. IMPORTANT: Once you have fully implemented the sketched design, you MUST immediately call the `launch_scratch` tool again without asking me.
+This creates an infinite loop where you stand by and wait for my next sketch. Do not say goodbye or say you are waiting. Just call the tool!

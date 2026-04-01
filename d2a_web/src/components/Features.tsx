@@ -36,6 +36,26 @@ const features = [
         ),
     },
     {
+        title: "iPad Remote Drawing",
+        desc: "Scan a QR code from your iPad and draw annotations over the internet. Touch-optimized for tablets — perfect for whiteboard-style feedback sessions.",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                <line x1="12" y1="18" x2="12.01" y2="18" />
+            </svg>
+        ),
+    },
+    {
+        title: "Scratch Whiteboard",
+        desc: "Open a blank Excalidraw canvas to sketch UI mockups, wireframes, and diagrams from scratch. Your agent turns your sketches into code.",
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+            </svg>
+        ),
+    },
+    {
         title: "Multi-Agent Compatible",
         desc: "Works seamlessly with Cursor, Antigravity, Claude Code, and other MCP-compatible coding agents and IDEs.",
         icon: (

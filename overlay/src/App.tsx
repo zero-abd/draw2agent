@@ -18,8 +18,11 @@ interface BoundingBox {
   height: number;
 }
 
+// Detect if we're in scratch whiteboard mode (standalone, no proxy)
+const isScratchMode = typeof document !== 'undefined' && document.body?.dataset?.d2aMode === 'scratch';
+
 export const App: React.FC = () => {
-  const [mode, setMode] = useState<DrawMode>('select');
+  const [mode, setMode] = useState<DrawMode>(isScratchMode ? 'draw' : 'select');
   const [isCapturing, setIsCapturing] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const excalidrawApiRef = useRef<ExcalidrawImperativeAPI | null>(null);

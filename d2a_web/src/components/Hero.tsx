@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import NpmDownloads from "./NpmDownloads";
 
 function TypingTerminal() {
     const command = "npx -y draw2agent@latest";
@@ -65,6 +66,16 @@ export default function Hero() {
                 >
                     <span className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)] pulse-dot" />
                     Open Source MCP Server
+                </motion.div>
+
+                {/* Download counter */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.05, ease: "easeOut" }}
+                    className="mb-6"
+                >
+                    <NpmDownloads />
                 </motion.div>
 
                 {/* Headline */}
