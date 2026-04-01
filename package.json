@@ -1,6 +1,6 @@
 {
   "name": "draw2agent",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "mcpName": "io.github.zero-abd/draw2agent",
   "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
   "type": "module",

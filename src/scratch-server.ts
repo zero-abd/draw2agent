@@ -170,8 +170,8 @@ export function startScratchServer(port: number): Promise<string> {
       res.end('Not found');
     });
 
-    scratchServer.listen(port, () => {
-      const url = `http://localhost:${port}`;
+    scratchServer.listen(port, '127.0.0.1', () => {
+      const url = `http://127.0.0.1:${port}`;
       console.error(`[draw2agent] 🎨 Scratch whiteboard at ${url}`);
       resolve(url);
     });

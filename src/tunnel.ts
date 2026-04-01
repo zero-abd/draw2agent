@@ -10,7 +10,7 @@ export async function startTunnel(localPort: number): Promise<string> {
   // Close any existing tunnel first
   await stopTunnel();
 
-  const tunnel = await localtunnel({ port: localPort });
+  const tunnel = await localtunnel({ port: localPort, local_host: '127.0.0.1' });
 
   tunnel.on('close', () => {
     console.error('[draw2agent] 🔌 Tunnel closed');

@@ -179,8 +179,8 @@ export function startHttpServer(targetUrl: string, port: number): Promise<string
       proxy.ws(req, socket, head);
     });
 
-    server.listen(port, () => {
-      const proxyUrl = `http://localhost:${port}`;
+    server.listen(port, '127.0.0.1', () => {
+      const proxyUrl = `http://127.0.0.1:${port}`;
       console.error(`[draw2agent] 🚀 Proxy running at ${proxyUrl} → ${targetUrl}`);
       resolve(proxyUrl);
     });
