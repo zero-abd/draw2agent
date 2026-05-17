@@ -1,6 +1,6 @@
 {
   "name": "draw2agent",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "mcpName": "io.github.zero-abd/draw2agent",
   "description": "Draw on your website, let your AI agent see it. Visual context for code generation via MCP.",
   "type": "module",
@@ -33,13 +33,11 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "http-proxy": "^1.18.1",
-    "localtunnel": "^2.0.2",
     "open": "^10.1.0",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@types/http-proxy": "^1.17.14",
-    "@types/localtunnel": "^2.0.4",
     "@types/node": "^22.0.0",
     "@types/qrcode": "^1.5.6",
     "tsup": "^8.0.0",

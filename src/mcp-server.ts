@@ -3,12 +3,12 @@
  */
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
-import { startHttpServer, stopHttpServer } from './http-server.js';
+import { startHttpServer, stopHttpServer, setQrPage } from './http-server.js';
 import { startScratchServer, stopScratchServer } from './scratch-server.js';
-import { startTunnel, stopTunnel } from './tunnel.js';
 import { generateQR } from './utils/qrcode.js';
 import { getState, clearState, setProxyInfo, clearProxyInfo, getProxyInfo, waitForState } from './state-store.js';
 import { openBrowser } from './utils/browser.js';
+import { getLanIp } from './utils/network.js';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -50,8 +50,6 @@ function handleToolError(err: unknown, toolName: string) {
     customInstructions = customInstructions.replace(/launch_canvas/g, toolName);
     isErrorResult = false;
 
-    // Cleanly shut down servers so the next request spins up a new tab
-    stopTunnel();
     customInstructions = readPromptFile(ERROR_INSTRUCTIONS_PATH, customInstructions)
       .replace('{{ERROR_MESSAGE}}', message);
   }
@@ -60,6 +58,11 @@ function handleToolError(err: unknown, toolName: string) {
     content: [{ type: 'text' as const, text: customInstructions }],
     isError: isErrorResult,
   };
+}
+
+/** Builds the QR landing page shown on the user's computer for scanning. */
+function buildQrPageHtml(qrDataUrl: string, ipadUrl: string, proxyPort: number): string {
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>draw2agent — Scan to Draw</title></head><body style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#1e1e2e;color:white;font-family:system-ui,-apple-system,sans-serif;text-align:center;padding:24px;box-sizing:border-box;"><h1 style="margin:0 0 8px;">📱 Scan to Draw</h1><p style="margin:0 0 24px;opacity:0.8;max-width:420px;">Scan this QR code with your iPad's camera to start annotating. Your iPad must be on the <strong>same Wi-Fi network</strong> as this computer.</p><img src="${qrDataUrl}" alt="QR code" style="border-radius:12px;width:300px;height:300px;background:#fff;"/><p style="margin:24px 0 0;font-size:1.1rem;background:#ffffff10;padding:8px 16px;border-radius:8px;">${ipadUrl}</p><p style="margin:16px 0 0;opacity:0.5;font-size:0.85rem;max-width:420px;">If your iPad can't connect, make sure this computer's firewall allows incoming connections on port ${proxyPort}.</p></body></html>`;
 }
 
 export function createMcpServer(): McpServer {
@@ -139,7 +142,7 @@ export function createMcpServer(): McpServer {
   // ─── Tool: launch_ipad_canvas ────────────────────────────────────────
   server.tool(
     'launch_ipad_canvas',
-    'Launch a remote drawing canvas accessible from an iPad or mobile device. Creates a tunnel to expose the local dev page over the internet and returns a QR code that the user can scan from their iPad. The user draws annotations on their device, and this tool blocks until they submit, returning the visual context. Ideal for touch-based annotation workflows.',
+    'Launch a drawing canvas accessible from an iPad or mobile device on the same Wi-Fi network. Serves the local dev page on this machine\'s LAN address and opens a QR code in the browser that the user scans from their iPad. The user draws annotations on their device, and this tool blocks until they submit, returning the visual context. Ideal for touch-based annotation workflows.',
     {
       targetUrl: z.string().describe('The URL of the local dev server to overlay (e.g. http://localhost:3000)'),
       port: z.number().optional().describe('Port for the draw2agent proxy server (default: 9742)'),
@@ -166,33 +169,44 @@ export function createMcpServer(): McpServer {
           }
         }
 
-        // Start the proxy server
+        // Resolve the machine's LAN IP so an iPad on the same Wi-Fi can
+        // connect directly — far more reliable than an internet tunnel.
+        const lanIp = getLanIp();
+        if (!lanIp) {
+          return {
+            content: [
+              {
+                type: 'text' as const,
+                text: '❌ Could not determine this machine\'s local network (LAN) IP address. The iPad canvas needs a Wi-Fi/Ethernet connection so your iPad can reach this computer. Please connect to a network and try again.',
+              },
+            ],
+            isError: true,
+          };
+        }
+
+        // Start the proxy server (bound to 0.0.0.0, reachable over the LAN)
         const proxyInfo = getProxyInfo();
         if (!proxyInfo.running) {
           const proxyUrl = await startHttpServer(targetUrl, proxyPort);
           setProxyInfo(proxyUrl);
         }
 
-        // Create a tunnel to expose it over the internet
-        const tunnelUrl = await startTunnel(proxyPort);
+        // The URL the iPad will open — the LAN address of this machine.
+        const ipadUrl = `http://${lanIp}:${proxyPort}`;
 
-        // Generate QR code for the tunnel URL
-        const qr = await generateQR(tunnelUrl);
+        // Generate QR code for the LAN URL
+        const qr = await generateQR(ipadUrl);
 
-        // Open local page showing QR code so user can scan it
-        const os = await import('node:os');
-        const tempFile = path.join(os.tmpdir(), `draw2agent-qr-${Date.now()}.html`);
-        const html = `<!DOCTYPE html><html><body style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100px;min-height:100vh;margin:0;background:#1e1e2e;color:white;font-family:system-ui,sans-serif;"><h1>📱 Scan to Draw</h1><p style="margin-bottom:30px;opacity:0.8;">Scan this QR code from your iPad to start annotating remotely.</p><img src="${qr.dataUrl}" style="border-radius:12px;width:300px;height:300px;"/><p style="margin-top:30px;font-size:1.2rem;background:#ffffff10;padding:8px 16px;border-radius:8px;">${tunnelUrl}</p></body></html>`;
-        fs.writeFileSync(tempFile, html);
-        await openBrowser(`file://${tempFile}`);
+        // Serve the QR landing page from the proxy itself and open it over
+        // HTTP. Opening an http:// URL is reliable on every platform, unlike
+        // a file:// URL to a temp file (which fails to open on Windows).
+        setQrPage(buildQrPageHtml(qr.dataUrl, ipadUrl, proxyPort));
+        await openBrowser(`http://127.0.0.1:${proxyPort}/__d2a__/qr`);
 
         clearState();
 
         // Wait for the user to submit their drawing from the iPad
         const state = await waitForState();
-
-        // Clean up tunnel after submission
-        await stopTunnel();
 
         const customInstructions = readPromptFile(
           IPAD_INSTRUCTIONS_PATH,
@@ -213,7 +227,6 @@ export function createMcpServer(): McpServer {
           ],
         };
       } catch (err) {
-        await stopTunnel();
         return handleToolError(err, 'launch_ipad_canvas');
       }
     }

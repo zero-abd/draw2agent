@@ -28,6 +28,16 @@ const MIME_TYPES: Record<string, string> = {
 };
 
 let server: http.Server | null = null;
+let qrPageHtml: string | null = null;
+
+/**
+ * Sets the HTML for the QR landing page served at `/__d2a__/qr`.
+ * Used by launch_ipad_canvas so the QR page can be opened over HTTP
+ * (reliable cross-platform) instead of a fragile file:// URL.
+ */
+export function setQrPage(html: string): void {
+  qrPageHtml = html;
+}
 
 export function startHttpServer(targetUrl: string, port: number): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -144,6 +154,21 @@ export function startHttpServer(targetUrl: string, port: number): Promise<string
         return;
       }
 
+      // QR landing page — opened on the user's computer so they can scan it
+      if (url === `${D2A_PREFIX}/qr` && req.method === 'GET') {
+        if (!qrPageHtml) {
+          res.writeHead(404, { 'Content-Type': 'text/plain' });
+          res.end('No QR page available');
+          return;
+        }
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache',
+        });
+        res.end(qrPageHtml);
+        return;
+      }
+
       // Serve overlay static files
       if (url.startsWith(D2A_PREFIX + '/')) {
         const filePath = path.join(OVERLAY_DIR, url.slice(D2A_PREFIX.length));
@@ -179,7 +204,10 @@ export function startHttpServer(targetUrl: string, port: number): Promise<string
       proxy.ws(req, socket, head);
     });
 
-    server.listen(port, '127.0.0.1', () => {
+    // Bind to 0.0.0.0 (all interfaces) so the proxy is reachable both from
+    // localhost and from other devices on the LAN (e.g. an iPad scanning the
+    // QR code). Without this, mobile devices cannot connect.
+    server.listen(port, '0.0.0.0', () => {
       const proxyUrl = `http://127.0.0.1:${port}`;
       console.error(`[draw2agent] 🚀 Proxy running at ${proxyUrl} → ${targetUrl}`);
       resolve(proxyUrl);
