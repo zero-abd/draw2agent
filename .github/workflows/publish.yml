@@ -21,15 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Node 24's bundled npm (>= 11.5.1) already supports Trusted Publishing,
+      # so no fragile in-place `npm install -g npm@latest` self-upgrade.
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
-
-      # npm Trusted Publishing requires npm >= 11.5.1 (newer than the version
-      # bundled with Node 22).
-      - name: Upgrade npm
-        run: npm install -g npm@latest
 
       - name: Check whether this version is already published
         id: version
