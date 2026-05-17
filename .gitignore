@@ -132,6 +132,8 @@ dist-ssr
 
 # Test outputs
 test-output.png
+test-ipad-output.png
+dist-test
 
 # Videos
 videos/
