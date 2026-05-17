@@ -73,6 +73,37 @@ Opens a blank Excalidraw whiteboard — no target URL needed. Sketch UI mockups,
 ### `get_drawing_state`
 Returns the last captured drawing state (screenshot, DOM nodes, annotations) without launching a new session. Useful for re-fetching context.
 
+## Releasing
+
+Publishing to npm is automated via GitHub Actions ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)).
+To cut a release, just bump the version and push to `main`:
+
+```bash
+npm version patch   # or minor / major — updates package.json
+git push origin main
+```
+
+When `package.json`'s `version` changes on `main`, the workflow builds the
+server + overlay and publishes the new version to npm. You can also trigger it
+manually from the **Actions** tab (e.g. to publish the current version).
+
+### One-time setup: npm Trusted Publishing
+
+The workflow authenticates with npm via OIDC — **no `NPM_TOKEN` secret needed**.
+Configure the trusted publisher once:
+
+1. Go to [npmjs.com/package/draw2agent](https://www.npmjs.com/package/draw2agent) → **Settings** → **Trusted Publisher**.
+2. Choose **GitHub Actions** and enter:
+   - Organization or user: `zero-abd`
+   - Repository: `draw2agent`
+   - Workflow filename: `publish.yml`
+3. Save.
+
+This also satisfies npm's 2FA requirement, so publishing works even with
+account 2FA enabled. (Alternative: create an npm **Granular Access Token** with
+publish rights, add it as the `NPM_TOKEN` repo secret, and set
+`NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}` on the publish step instead.)
+
 ## License
 
 MIT
