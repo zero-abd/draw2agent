@@ -1,7 +1,7 @@
 # draw2agent ✏️
 
 [![npm version](https://img.shields.io/npm/v/draw2agent)](https://www.npmjs.com/package/draw2agent)
-[![mcp-registry](https://img.shields.io/badge/mcp--registry-io.github.zero--abd%2Fdraw2agent%402.0.0-blue)](https://registry.modelcontextprotocol.io/?q=draw2agent)
+[![mcp-registry](https://img.shields.io/badge/mcp--registry-io.github.zero--abd%2Fdraw2agent%402.1.0-blue)](https://registry.modelcontextprotocol.io/?q=draw2agent)
 
 Draw on your website. Your AI agent sees it.
 
