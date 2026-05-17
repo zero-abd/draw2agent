@@ -13,6 +13,8 @@ interface ToolbarProps {
   onClose: () => void;
   isCapturing: boolean;
   toast: string | null;
+  optionsOpen: boolean;
+  onToggleOptions: () => void;
 }
 
 export const Toolbar: React.FC<ToolbarProps> = ({
@@ -23,6 +25,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({
   onClose,
   isCapturing,
   toast,
+  optionsOpen,
+  onToggleOptions,
 }) => {
   return (
     <div className="d2a-toolbar">
@@ -46,6 +50,16 @@ export const Toolbar: React.FC<ToolbarProps> = ({
         >
           ✏️ Draw
         </button>
+
+        {mode === 'draw' && (
+          <button
+            className={`d2a-btn ${optionsOpen ? 'd2a-btn-active' : ''}`}
+            onClick={onToggleOptions}
+            title="Show color, pen, and shape options"
+          >
+            🎨 Options
+          </button>
+        )}
 
         <div className="d2a-toolbar-divider" />
 

@@ -122,6 +122,14 @@
   display: none !important;
 }
 
+/* In Draw mode, keep the color/properties panel and the shape-tools toolbar
+   hidden until the user reveals them with the "Options" button. This keeps the
+   annotation surface clean while still allowing freehand drawing. */
+.d2a-canvas-container[data-mode="draw"][data-options="closed"] .excalidraw .App-menu_top__left,
+.d2a-canvas-container[data-mode="draw"][data-options="closed"] .excalidraw .App-toolbar-container {
+  display: none !important;
+}
+
 /* Hide Excalidraw links from the hamburger menu */
 .d2a-canvas-container .excalidraw .dropdown-menu .Stack.Stack_vertical:has([href*="github.com"]),
 .d2a-canvas-container .excalidraw .dropdown-menu .Stack.Stack_vertical:has([href*="twitter.com"]),
