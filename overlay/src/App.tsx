@@ -23,6 +23,9 @@ const isScratchMode = typeof document !== 'undefined' && document.body?.dataset?
 
 export const App: React.FC = () => {
   const [mode, setMode] = useState<DrawMode>(isScratchMode ? 'draw' : 'select');
+  // Color/pen/shape panels are hidden by default in the page overlay for a
+  // clean annotation surface; the scratch whiteboard shows them up front.
+  const [optionsOpen, setOptionsOpen] = useState(isScratchMode);
   const [isCapturing, setIsCapturing] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const excalidrawApiRef = useRef<ExcalidrawImperativeAPI | null>(null);
@@ -313,6 +316,7 @@ export const App: React.FC = () => {
       <div
         className={`d2a-canvas-container ${isCapturing ? 'd2a-capturing' : ''}`}
         data-mode={mode}
+        data-options={optionsOpen ? 'open' : 'closed'}
         style={{ pointerEvents: mode === 'draw' && !isCapturing ? 'all' : 'none' }}
       >
         <Excalidraw
@@ -348,6 +352,8 @@ export const App: React.FC = () => {
         onClose={handleClose}
         isCapturing={isCapturing}
         toast={toast}
+        optionsOpen={optionsOpen}
+        onToggleOptions={() => setOptionsOpen((v) => !v)}
       />
     </>
   );
